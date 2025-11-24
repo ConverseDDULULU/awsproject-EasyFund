@@ -106,3 +106,4 @@ def get_expected_return(risk_class):
         return {"error": "invalid risk class"}
     r = _expected_portfolio_return(PORTFOLIOS[risk_class])
     return {"portfolio_expected": round(r, 2)}
+
