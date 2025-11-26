@@ -1,4 +1,4 @@
-﻿// src/pages/PortfolioAnalysis.jsx
+// src/pages/PortfolioAnalysis.jsx
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -32,11 +32,11 @@ const ASSET_DESC = {
 };
 
 const RISK_DESC = {
-  안정형: "원금 보전을 최우선으로 하는 보수적인 투자자.",
-  안정추구형: "안정성과 수익의 균형을 중시하는 투자자.",
-  균형형: "위험/수익 균형을 적절히 추구하는 투자자.",
-  성장형: "자본 성장을 목표로 중위험·중수익을 추구.",
-  공격형: "높은 수익을 위해 큰 변동성을 감내하는 투자자.",
+  "\uc548\uc815\ud615": "원금 보전을 중시하는 보수적 투자자.",
+  "\uc548\uc815\ucd94\uad6c\ud615": "안정과 수익 사이 균형을 추구하는 투자자.",
+  "\uade0\ud615\ud615": "채권과 주식을 고르게 가져가는 투자자.",
+  "\uc131\uc7a5\ud615": "높은 수익을 위해 변동성을 수용하는 투자자.",
+  "\uacf5\uaca9\ud615": "NASDAQ QQQ만 사용하고 VOO는 포함하지 않는 공격적 투자자.",
 };
 
 const SAMPLE_MAIN = { category: "포트폴리오(가정)", value: 12.52 };

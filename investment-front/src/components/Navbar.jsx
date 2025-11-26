@@ -15,19 +15,6 @@ export default function Navbar() {
 </Link>
 
   <nav className="flex items-center gap-6 text-sm text-white/90 font-semibold tracking-wide">
-  <Link
-    to="/survey"
-    className="hover:text-white transition duration-200 hover:drop-shadow-sm"
-  >
-    설문
-  </Link>
-
-  <Link
-    to="/portfolio"
-    className="hover:text-white transition duration-200 hover:drop-shadow-sm"
-  >
-    포트폴리오 분석
-  </Link>
 
   <Link
     to="/login"
@@ -35,6 +22,8 @@ export default function Navbar() {
   >
     로그인
   </Link>
+
+
 </nav>
       </div>
     </header>

@@ -1,12 +1,12 @@
-﻿import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import MarketBar from "./components/MarketBar";
 import RequireAuth from "./components/RequireAuth";
 import { isAuthenticated } from "./api/auth";
 
 import Home from "./pages/Home";
-import Survey from "./pages/survey";
+import Survey from "./pages/Survey";
 import Result from "./pages/Result";
 import PortfolioAnalysis from "./pages/PortfolioAnalysis";
 import Login from "./pages/Login";
@@ -16,19 +16,11 @@ export default function App() {
   return (
     <Router>
       <Navbar />
-      {isAuthenticated() && <MarketBar />}{/* 로그인된 사용자에게만 시장 정보 표시 */}
+      {isAuthenticated() && <MarketBar />}{/* Market bar shown only when logged in */}
 
       <div className="w-full min-h-screen px-8 py-6 max-w-7xl mx-auto">
-
         <Routes>
-          <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <Home />
-              </RequireAuth>
-            }
-          />
+          <Route path="/" element={<Home />} />
           <Route
             path="/survey"
             element={
@@ -55,6 +47,7 @@ export default function App() {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </Router>

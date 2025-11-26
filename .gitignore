@@ -42,6 +42,7 @@ venv/
 .env
 .env.*
 *.local
+aws-key.pem
 
 # Logs
 *.log

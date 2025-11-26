@@ -1,2 +1,4 @@
 aws 개인프로젝트
 백엔드 실행 명령어 uvicorn app:app --reload --port 5000
+
+AWS 접속 명령어 : ssh -i aws-key.pem ec2-user@3.88.1.103
