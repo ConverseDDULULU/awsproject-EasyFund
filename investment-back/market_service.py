@@ -31,12 +31,33 @@ def get_market_data():
                 data[name] = fetch(sym)
             except Exception:
                 data[name] = None
-
-        # If everything failed, raise to surface an error
+        # If everything failed, return a static fallback so the UI can render
         if all(v is None for v in data.values()):
-            raise RuntimeError("All market fetches failed.")
+            return {
+                "USD/KRW": 1300.0,
+                "S&P500": 4700.0,
+                "NASDAQ": 16500.0,
+                "DOW": 36000.0,
+                "DXY": 104.0,
+                "미국 국채(13주)": 5.3,
+                "미국 5년물": 4.2,
+                "미국 10년물": 4.1,
+                "미국 30년물": 4.3,
+                "note": "fallback data (live fetch failed)",
+            }
         return data
     except Exception as e:
-        # Log and surface a 503 so the frontend can show an error bar
+        # Log and return fallback instead of surfacing 503 to keep UI alive
         print(f"[market_service] market fetch failed: {e}")
-        raise HTTPException(status_code=503, detail="Failed to fetch market data.")
+        return {
+            "USD/KRW": 1300.0,
+            "S&P500": 4700.0,
+            "NASDAQ": 16500.0,
+            "DOW": 36000.0,
+            "DXY": 104.0,
+            "미국 국채(13주)": 5.3,
+            "미국 5년물": 4.2,
+            "미국 10년물": 4.1,
+            "미국 30년물": 4.3,
+            "note": "fallback data (exception fallback)",
+        }

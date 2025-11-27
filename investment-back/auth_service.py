@@ -1,53 +1,78 @@
-import json
-import hashlib
-import base64
-from pathlib import Path
+import os
+from datetime import datetime, timedelta
 from typing import Dict, Optional
 
-USERS_FILE = Path(__file__).resolve().parent / "users.json"
+import bcrypt
+from jose import jwt
+from sqlalchemy import Column, DateTime, Integer, String, func
+from sqlalchemy.orm import Session
+
+from database import Base, engine
 
 
-def _load_users() -> Dict[str, Dict[str, str]]:
-    if USERS_FILE.exists():
-        try:
-            return json.loads(USERS_FILE.read_text(encoding="utf-8"))
-        except Exception:
-            return {}
-    return {}
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "change-me")
+JWT_ALGORITHM = "HS256"
+JWT_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "60"))
 
 
-def _save_users(users: Dict[str, Dict[str, str]]) -> None:
-    USERS_FILE.write_text(json.dumps(users, ensure_ascii=False, indent=2), encoding="utf-8")
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(255), unique=True, index=True, nullable=False)
+    name = Column(String(255), nullable=False)
+    password_hash = Column(String(255), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+Base.metadata.create_all(bind=engine)
 
 
 def _hash_password(password: str) -> str:
-    return hashlib.sha256(password.encode("utf-8")).hexdigest()
+    hashed = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+    return hashed.decode("utf-8")
 
 
-def signup(email: str, password: str, name: str) -> Dict[str, str]:
-    users = _load_users()
-    if email in users:
-        return {"error": "이미 가입된 이메일입니다."}
-    users[email] = {"password": _hash_password(password), "name": name}
-    _save_users(users)
-    token = base64.b64encode(f"{email}:{name}".encode("utf-8")).decode("utf-8")
-    return {"token": token, "email": email, "name": name}
+def _verify_password(password: str, password_hash: str) -> bool:
+    try:
+        return bcrypt.checkpw(password.encode("utf-8"), password_hash.encode("utf-8"))
+    except ValueError:
+        return False
 
 
-def login(email: str, password: str) -> Dict[str, str]:
-    users = _load_users()
-    user = users.get(email)
+def _create_access_token(email: str, name: str) -> str:
+    expire = datetime.utcnow() + timedelta(minutes=JWT_EXPIRE_MINUTES)
+    payload = {"sub": email, "name": name, "exp": expire}
+    return jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+
+
+def signup(email: str, password: str, name: str, db: Session) -> Dict[str, str]:
+    existing_user = db.query(User).filter(User.email == email).first()
+    if existing_user:
+        return {"error": "Email already registered."}
+
+    user = User(email=email, name=name, password_hash=_hash_password(password))
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    token = _create_access_token(user.email, user.name)
+    return {"token": token, "email": user.email, "name": user.name}
+
+
+def login(email: str, password: str, db: Session) -> Dict[str, str]:
+    user = db.query(User).filter(User.email == email).first()
     if not user:
-        return {"error": "존재하지 않는 계정입니다."}
-    if user["password"] != _hash_password(password):
-        return {"error": "비밀번호가 올바르지 않습니다."}
-    token = base64.b64encode(f"{email}:{user['name']}".encode("utf-8")).decode("utf-8")
-    return {"token": token, "email": email, "name": user["name"]}
+        return {"error": "Account not found."}
+    if not _verify_password(password, user.password_hash):
+        return {"error": "Invalid credentials."}
+
+    token = _create_access_token(user.email, user.name)
+    return {"token": token, "email": user.email, "name": user.name}
 
 
-def get_profile(email: str) -> Optional[Dict[str, str]]:
-    users = _load_users()
-    user = users.get(email)
+def get_profile(email: str, db: Session) -> Optional[Dict[str, str]]:
+    user = db.query(User).filter(User.email == email).first()
     if not user:
         return None
-    return {"email": email, "name": user["name"]}
+    return {"email": user.email, "name": user.name}

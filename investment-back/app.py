@@ -1,25 +1,27 @@
-from fastapi import FastAPI
-from fastapi import HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+
+from auth_schema import LoginRequest, SignupRequest
+from auth_service import login, signup
+from database import get_db
 from market_service import get_market_data
-from portfolio_service import get_model_portfolio
-from survey_service import calculate_risk_class
 from portfolio_service import (
+    get_expected_return,
+    get_future_forecast,
     get_model_portfolio,
     get_past_10_years,
-    get_future_forecast,
-    get_expected_return,
 )
-from auth_service import signup, login
-
+from survey_service import calculate_risk_class
 
 
 app = FastAPI()
 
-# CORS 허용 (리액트와 연동 위해 필수)
+# CORS for frontend integration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # restrict to specific domains later
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -29,28 +31,21 @@ app.add_middleware(
 def market():
     return get_market_data()
 
+
 @app.post("/auth/signup")
-def auth_signup(payload: dict):
-    email = payload.get("email")
-    password = payload.get("password")
-    name = payload.get("name")
-    if not all([email, password, name]):
-        raise HTTPException(status_code=400, detail="필수 항목이 누락되었습니다.")
-    res = signup(email, password, name)
-    if "error" in res:
-        raise HTTPException(status_code=400, detail=res["error"])
-    return res
+def auth_signup(req: SignupRequest, db: Session = Depends(get_db)):
+    result = signup(req.email, req.password, req.name, db)
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
 
 @app.post("/auth/login")
-def auth_login(payload: dict):
-    email = payload.get("email")
-    password = payload.get("password")
-    if not all([email, password]):
-        raise HTTPException(status_code=400, detail="필수 항목이 누락되었습니다.")
-    res = login(email, password)
-    if "error" in res:
-        raise HTTPException(status_code=400, detail=res["error"])
-    return res
+def auth_login(req: LoginRequest, db: Session = Depends(get_db)):
+    result = login(req.email, req.password, db)
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
 
 
 @app.post("/survey/submit")
@@ -65,14 +60,15 @@ def portfolio(risk_class: str):
     return get_model_portfolio(risk_class)
 
 
-
 @app.get("/portfolio/past/{risk_class}")
 def past(risk_class: str):
     return get_past_10_years(risk_class)
 
+
 @app.get("/portfolio/forecast/{risk_class}")
 def forecast(risk_class: str):
     return get_future_forecast(risk_class)
+
 
 @app.get("/portfolio/expected/{risk_class}")
 def expected(risk_class: str):

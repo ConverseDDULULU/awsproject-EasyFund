@@ -9,6 +9,9 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+*.db
+investment-back/app.db
+investment-back/users.json
 
 # Env / Secrets
 .env
