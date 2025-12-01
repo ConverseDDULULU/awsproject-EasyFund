@@ -1,9 +1,8 @@
 import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getUser, isAuthenticated, logout } from "../api/auth";
 
 export default function Navbar() {
-  const location = useLocation();
   const navigate = useNavigate();
   const [authState, setAuthState] = React.useState({
     authed: isAuthenticated(),
@@ -15,11 +14,18 @@ export default function Navbar() {
     : "";
 
   React.useEffect(() => {
-    setAuthState({
-      authed: isAuthenticated(),
-      user: getUser(),
-    });
-  }, [location]);
+    const syncAuth = () => {
+      setAuthState({
+        authed: isAuthenticated(),
+        user: getUser(),
+      });
+    };
+
+    window.addEventListener("storage", syncAuth);
+    syncAuth();
+
+    return () => window.removeEventListener("storage", syncAuth);
+  }, []);
 
   function handleLogout() {
     logout();
