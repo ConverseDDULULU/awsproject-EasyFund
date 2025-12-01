@@ -24,6 +24,7 @@ export default function Login() {
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow rounded-lg space-y-4">
       <h1 className="text-2xl font-bold">로그인</h1>
+      <p className="text-sm text-gray-600">회원가입을 해서 초보자용 포트폴리오는 추천받아요</p>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
@@ -50,7 +51,10 @@ export default function Login() {
       </button>
 
       <p className="text-sm text-center text-gray-600">
-        아직 계정이 없나요? <Link className="text-blue-600" to="/signup">회원가입</Link>
+        아직 계정이 없나요?{" "}
+        <Link className="text-blue-600" to="/signup">
+          회원가입
+        </Link>
       </p>
     </div>
   );

@@ -25,7 +25,7 @@ export default function Signup() {
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow rounded-lg space-y-4">
       <h1 className="text-2xl font-bold">회원가입</h1>
-      <p className="text-sm text-gray-600">이메일과 이름, 비밀번호를 입력해 계정을 만들어주세요.</p>
+      <p className="text-sm text-gray-600">이메일과 이름, 비밀번호를 입력해 계정을 만들어 주세요.</p>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
@@ -58,7 +58,10 @@ export default function Signup() {
       </button>
 
       <p className="text-sm text-center text-gray-600">
-        이미 계정이 있나요? <Link className="text-blue-600" to="/login">로그인</Link>
+        이미 계정이 있나요?{" "}
+        <Link className="text-blue-600" to="/login">
+          로그인
+        </Link>
       </p>
     </div>
   );

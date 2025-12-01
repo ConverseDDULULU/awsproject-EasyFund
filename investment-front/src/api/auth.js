@@ -6,7 +6,7 @@ const USER_KEY = "auth_user";
 function setSession({ token, email, name }) {
   localStorage.setItem(TOKEN_KEY, token);
   localStorage.setItem(USER_KEY, JSON.stringify({ email, name }));
-} 
+}
 
 export function logout() {
   localStorage.removeItem(TOKEN_KEY);
@@ -29,7 +29,7 @@ export function getUser() {
 
 export async function login(email, password) {
   if (!email || !password) {
-    return { ok: false, message: "이메일과 비밀번호를 입력해주세요." };
+    return { ok: false, message: "이메일과 비밀번호를 입력해 주세요." };
   }
   try {
     const res = await client.post("/auth/login", { email, password });
@@ -44,7 +44,7 @@ export async function login(email, password) {
 
 export async function signup(name, email, password) {
   if (!name || !email || !password) {
-    return { ok: false, message: "이름, 이메일, 비밀번호를 모두 입력해주세요." };
+    return { ok: false, message: "이름, 이메일, 비밀번호를 모두 입력해 주세요." };
   }
   try {
     const res = await client.post("/auth/signup", { name, email, password });
