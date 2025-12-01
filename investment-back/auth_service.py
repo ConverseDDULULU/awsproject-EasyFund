@@ -47,14 +47,29 @@ def _create_access_token(email: str, name: str) -> str:
 
 
 def signup(email: str, password: str, name: str, db: Session) -> Dict[str, str]:
+    print("📌 SIGNUP STARTED:", email, password, name)
+
     existing_user = db.query(User).filter(User.email == email).first()
+    print("📌 EXISTING USER:", existing_user)
+
     if existing_user:
         return {"error": "Email already registered."}
 
-    user = User(email=email, name=name, password=_hash_password(password))
+    hashed_pw = _hash_password(password)
+    print("📌 HASHED PW:", hashed_pw)
+
+    user = User(email=email, name=name, password=hashed_pw)
     db.add(user)
-    db.commit()
+
+    try:
+        db.commit()
+        print("📌 COMMIT SUCCESS")
+    except Exception as e:
+        print("❌ DB ERROR:", e)
+        raise
+
     db.refresh(user)
+    print("📌 USER CREATED:", user.id)
 
     token = _create_access_token(user.email, user.name)
     return {"token": token, "email": user.email, "name": user.name}
