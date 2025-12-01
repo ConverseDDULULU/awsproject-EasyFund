@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import MarketBar from "./components/MarketBar";
 import RequireAuth from "./components/RequireAuth";
@@ -12,11 +12,15 @@ import PortfolioAnalysis from "./pages/PortfolioAnalysis";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
-export default function App() {
+function Layout() {
+  const location = useLocation();
+  const authed = isAuthenticated();
+  const hideMarketBar = ["/login", "/signup"].includes(location.pathname);
+
   return (
-    <Router>
+    <>
       <Navbar />
-      {isAuthenticated() && <MarketBar />}{/* Market bar shown only when logged in */}
+      {authed && !hideMarketBar && <MarketBar />}
 
       <div className="w-full min-h-screen px-8 py-6 max-w-7xl mx-auto">
         <Routes>
@@ -50,6 +54,14 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <Layout />
     </Router>
   );
 }
