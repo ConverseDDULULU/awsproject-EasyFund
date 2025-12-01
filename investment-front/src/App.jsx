@@ -27,15 +27,16 @@ function Layout() {
           
           {/* 🔥 홈 라우트 수정됨 */}
           <Route
-            path="/"
-            element={
-              isAuthenticated() ? (
-                <Navigate to="/portfolio" replace />
-              ) : (
-                <Home />
-              )
-            }
-          />
+  path="/"
+  element={
+    isAuthenticated() ? (
+      <Navigate to="/portfolio" replace />
+    ) : (
+      <Navigate to="/login" replace />
+    )
+  }
+/>
+
 
           <Route
             path="/survey"
