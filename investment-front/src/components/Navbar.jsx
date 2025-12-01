@@ -11,7 +11,7 @@ export default function Navbar() {
   });
 
   const userLabel = authState.user?.name
-    ? `${authState.user.name}님 환영합니다`
+    ? `${authState.user.name}\ub2d8 \ud658\uc601\ud569\ub2c8\ub2e4!`
     : "";
 
   React.useEffect(() => {
@@ -45,29 +45,28 @@ export default function Navbar() {
                   {userLabel}
                 </span>
               )}
-
               <button
                 onClick={handleLogout}
                 className="px-3 py-1 rounded-md bg-white/15 hover:bg-white/25 transition duration-200"
               >
-                로그아웃
+                \ub85c\uadf8\uc544\uc6c3
               </button>
             </>
           ) : (
-            <>
+            <div className="flex items-center gap-3">
               <Link
                 to="/signup"
                 className="hover:text-white transition duration-200 hover:drop-shadow-sm"
               >
-                회원가입
+                \ud68c\uc6d0\uac00\uc785
               </Link>
               <Link
                 to="/login"
                 className="hover:text-white transition duration-200 hover:drop-shadow-sm"
               >
-                로그인
+                \ub85c\uadf8\uc778
               </Link>
-            </>
+            </div>
           )}
         </nav>
       </div>

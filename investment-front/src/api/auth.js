@@ -29,7 +29,10 @@ export function getUser() {
 
 export async function login(email, password) {
   if (!email || !password) {
-    return { ok: false, message: "이메일과 비밀번호를 입력해 주세요." };
+    return {
+      ok: false,
+      message: "\\uc774\\uba54\\uc77c\\uacfc \\ube44\\ubc00\\ubc88\\ud638\\ub97c \\uc785\\ub825\\ud574 \\uc8fc\\uc138\\uc694.",
+    };
   }
   try {
     const res = await client.post("/auth/login", { email, password });
@@ -37,14 +40,19 @@ export async function login(email, password) {
     setSession({ token, email, name });
     return { ok: true };
   } catch (err) {
-    const message = err?.response?.data?.detail || "로그인에 실패했습니다.";
+    const message =
+      err?.response?.data?.detail ||
+      "\\ub85c\\uadf8\\uc778\\uc5d0 \\uc2e4\\ud328\\ud588\\uc2b5\\ub2c8\\ub2e4.";
     return { ok: false, message };
   }
 }
 
 export async function signup(name, email, password) {
   if (!name || !email || !password) {
-    return { ok: false, message: "이름, 이메일, 비밀번호를 모두 입력해 주세요." };
+    return {
+      ok: false,
+      message: "\\uc774\\ub984, \\uc774\\uba54\\uc77c, \\ube44\\ubc00\\ubc88\\ud638\\ub97c \\ubaa8\\ub450 \\uc785\\ub825\\ud574 \\uc8fc\\uc138\\uc694.",
+    };
   }
   try {
     const res = await client.post("/auth/signup", { name, email, password });
@@ -52,7 +60,9 @@ export async function signup(name, email, password) {
     setSession({ token, email, name });
     return { ok: true };
   } catch (err) {
-    const message = err?.response?.data?.detail || "회원가입에 실패했습니다.";
+    const message =
+      err?.response?.data?.detail ||
+      "\\ud68c\\uc6d0\\uac00\\uc785\\uc5d0 \\uc2e4\\ud328\\ud588\\uc2b5\\ub2c8\\ub2e4.";
     return { ok: false, message };
   }
 }
