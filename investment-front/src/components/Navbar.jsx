@@ -9,9 +9,10 @@ export default function Navbar() {
     authed: isAuthenticated(),
     user: getUser(),
   });
+
   const userLabel = authState.user?.name
     ? `${authState.user.name}님 환영합니다`
-    : "로그인됨";
+    : "";
 
   React.useEffect(() => {
     setAuthState({
@@ -39,9 +40,12 @@ export default function Navbar() {
         <nav className="flex items-center gap-4 text-sm text-white/90 font-semibold tracking-wide">
           {authState.authed ? (
             <>
-              <span className="px-3 py-1 rounded-full bg-white/15 text-white drop-shadow-sm">
-                {userLabel}
-              </span>
+              {userLabel && (
+                <span className="px-3 py-1 rounded-full bg-white/15 text-white drop-shadow-sm">
+                  {userLabel}
+                </span>
+              )}
+
               <button
                 onClick={handleLogout}
                 className="px-3 py-1 rounded-md bg-white/15 hover:bg-white/25 transition duration-200"
