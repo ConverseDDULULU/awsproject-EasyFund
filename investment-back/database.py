@@ -5,7 +5,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 # RDS MySQL connection settings (override via env vars in production)
 RDS_USER = os.getenv("RDS_USER", "admin")
 RDS_PASSWORD = os.getenv("RDS_PASSWORD", "YOUR_PASSWORD")
-RDS_HOST = os.getenv("RDS_HOST", "database-2.c10gmuokacda.us-east-1.rds.amazonaws.com")
+RDS_HOST = os.getenv("RDS_HOST", "easyfund-db.c10gmuokacda.us-east-1.rds.amazonaws.com")
 RDS_DB = os.getenv("RDS_DB", "mydb")
 
 # mysql+pymysql driver ensures compatibility with AWS RDS MySQL
