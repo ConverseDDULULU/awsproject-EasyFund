@@ -1,14 +1,16 @@
 aws 개인프로젝트
 백엔드 실행 명령어 uvicorn app:app --reload --port 5000
+                         uvicorn app:app --host 0.0.0.0 --port 5000 --reload
 
-AWS 접속 명령어 : ssh -i aws-key.pem ec2-user@3.87.87.82
+
+AWS 접속 명령어 : ssh -i aws-key.pem ec2-user@54.163.92.239
 
 
 실행중인 aws 서버 찾기 ps aux | grep uvicorn 
 실행중인 aws 서버 지우기 sudo kill -9 2927
 
 깃 git add .
-git commit -m "Add debug logs for signup error fix"
+git commit -m "API code"
 git push origin main
 
 aws서버에서 최신 깃 코드 받기 git pull
