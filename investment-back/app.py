@@ -1,6 +1,9 @@
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from database import Base, engine
+Base.metadata.create_all(bind=engine)
+
 
 from auth_schema import LoginRequest, SignupRequest
 from auth_service import login, signup
