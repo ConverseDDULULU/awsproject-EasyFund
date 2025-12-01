@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import MarketBar from "./components/MarketBar";
@@ -24,7 +24,19 @@ function Layout() {
 
       <div className="w-full min-h-screen px-8 py-6 max-w-7xl mx-auto">
         <Routes>
-          <Route path="/" element={<Home />} />
+          
+          {/* 🔥 홈 라우트 수정됨 */}
+          <Route
+            path="/"
+            element={
+              isAuthenticated() ? (
+                <Navigate to="/portfolio" replace />
+              ) : (
+                <Home />
+              )
+            }
+          />
+
           <Route
             path="/survey"
             element={
