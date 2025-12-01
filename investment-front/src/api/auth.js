@@ -6,7 +6,7 @@ const USER_KEY = "auth_user";
 function setSession({ token, email, name }) {
   localStorage.setItem(TOKEN_KEY, token);
   localStorage.setItem(USER_KEY, JSON.stringify({ email, name }));
-}
+} 
 
 export function logout() {
   localStorage.removeItem(TOKEN_KEY);
