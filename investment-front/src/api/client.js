@@ -1,9 +1,7 @@
 import axios from "axios";
 
-// Prefer env override; fall back to same host on port 5000 so prod build hits the deployed backend.
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  `${window.location.protocol}//${window.location.hostname}:5000`;
+// Prefer env override; default to nginx proxy path so front-end always calls backend through /api.
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
 const client = axios.create({
   baseURL: API_BASE_URL,

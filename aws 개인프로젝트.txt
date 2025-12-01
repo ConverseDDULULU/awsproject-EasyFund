@@ -6,3 +6,9 @@ AWS 접속 명령어 : ssh -i aws-key.pem ec2-user@3.87.87.82
 
 실행중인 aws 서버 찾기 ps aux | grep uvicorn 
 실행중인 aws 서버 지우기 sudo kill -9 2927
+
+깃 git add .
+git commit -m "Add debug logs for signup error fix"
+git push origin main
+
+aws서버에서 최신 깃 코드 받기 git pull
