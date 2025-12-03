@@ -58,21 +58,21 @@ def submit(data: dict):
     return {"risk_class": risk_class}
 
 
-@app.get("/portfolio/model/{risk_class}")
+@app.get("/portfolio/model")
 def portfolio(risk_class: str):
     return get_model_portfolio(risk_class)
 
 
-@app.get("/portfolio/past/{risk_class}")
+@app.get("/portfolio/past")
 def past(risk_class: str):
     return get_past_10_years(risk_class)
 
 
-@app.get("/portfolio/forecast/{risk_class}")
+@app.get("/portfolio/forecast")
 def forecast(risk_class: str):
     return get_future_forecast(risk_class)
 
 
-@app.get("/portfolio/expected/{risk_class}")
+@app.get("/portfolio/expected")
 def expected(risk_class: str):
     return get_expected_return(risk_class)

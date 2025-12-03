@@ -10,7 +10,7 @@ AWS 접속 명령어 : ssh -i aws-key.pem ec2-user@54.163.92.239
 실행중인 aws 서버 지우기 sudo kill -9 2927
 
 깃 git add .
-git commit -m "login update"
+git commit -m "aws api"
 git push origin main
 
 aws서버에서 최신 깃 코드 받기 git pull
@@ -19,3 +19,11 @@ RDS접속
 mysql -h easyfund-db.c10gmuokacda.us-east-1.rds.amazonaws.com -u admin -p
 
 EasyFundDB123!
+
+sudo rm -rf /usr/share/nginx/html/*
+sudo cp -r dist/* /usr/share/nginx/html/
+
+
+USE investment;
+SHOW TABLES;
+SELECT * FROM users;
