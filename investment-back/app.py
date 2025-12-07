@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, HTTPException
+﻿from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import Base, engine
@@ -16,6 +16,7 @@ from portfolio_service import (
     get_past_10_years,
 )
 from survey_service import calculate_risk_class
+from dynamo_service import save_user_risk, get_user_risk
 
 
 app = FastAPI()
@@ -53,8 +54,12 @@ def auth_login(req: LoginRequest, db: Session = Depends(get_db)):
 
 @app.post("/survey/submit")
 def submit(data: dict):
+    user_id = data["user_id"]
     answers = data["answers"]
     risk_class = calculate_risk_class(answers)
+
+    save_user_risk(user_id, risk_class)
+
     return {"risk_class": risk_class}
 
 
@@ -76,8 +81,6 @@ def forecast(risk_class: str):
 @app.get("/portfolio/expected")
 def expected(risk_class: str):
     return get_expected_return(risk_class)
-
-from dynamo_service import save_user_risk, get_user_risk
 
 
 @app.post("/dynamo/risk")
