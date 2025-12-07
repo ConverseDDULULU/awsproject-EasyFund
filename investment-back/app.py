@@ -76,3 +76,15 @@ def forecast(risk_class: str):
 @app.get("/portfolio/expected")
 def expected(risk_class: str):
     return get_expected_return(risk_class)
+
+from dynamo_service import save_user_risk, get_user_risk
+
+
+@app.post("/dynamo/risk")
+def save_risk(data: dict):
+    return save_user_risk(data["user_id"], data["risk_class"])
+
+
+@app.get("/dynamo/risk/{user_id}")
+def load_risk(user_id: str):
+    return get_user_risk(user_id)
